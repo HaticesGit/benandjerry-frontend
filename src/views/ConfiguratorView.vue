@@ -38,7 +38,26 @@ const selectFlavor = (flavor) => {
             child.material.color.set(colors[flavor]);
         }
     });
+    
 };
+
+const selectTopping = (topping) => {
+    selectedTopping.value = topping;
+
+    const toppingColors = {
+        "Oreo": "#1c1c1c",
+        "Banana": "#ffe066",
+        "Sprinkles": "#ff4fd8",
+    };
+
+    if (!iceCreamModel.value) return;
+
+    iceCreamModel.value.traverse((child) => {
+        if (child.isMesh && child.name === "IceCream_3_2") {
+            child.material.color.set(toppingColors[topping]);
+        }
+    });
+};  
 
 onMounted(() => {
     const scene = new THREE.Scene();
@@ -120,8 +139,8 @@ const placeOrder = async () => {
   <button v-for="flavor in flavors":key="flavor"@click="selectFlavor(flavor)">{{ flavor }}</button>
 
   <h2>Choose a topping</h2>
-  <button v-for="topping in toppings":key="topping"@click="selectedTopping = topping">{{ topping }}</button>
-
+  <button v-for="topping in toppings":key="topping"@click="selectTopping(topping)">{{ topping }}</button>
+  
   <h2>Cup or Cone</h2>
   <button @click="selectedCupOrCone = 'Cup'">Cup</button>
   <button @click="selectedCupOrCone = 'Cone'">Cone</button>
