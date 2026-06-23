@@ -21,7 +21,6 @@ const toppings = [
 
 const selectedFlavor = ref("");
 const selectedTopping = ref("");
-const selectedCupOrCone = ref("");
 const customerName = ref("");
 const address = ref("");
 const message = ref("");
@@ -137,7 +136,6 @@ const placeOrder = async () => {
         address: address.value,
         flavor: selectedFlavor.value,
         topping: selectedTopping.value,
-        cupOrCone: selectedCupOrCone.value,
         totalPrice: 4.5,
     };
 

@@ -51,7 +51,6 @@ const deleteOrder = async () => {
     <p>Address: {{ order.address }}</p>
     <p>Flavor: {{ order.flavor }}</p>
     <p>Topping: {{ order.topping }}</p>
-    <p>Cup or Cone: {{ order.cupOrCone }}</p>
     <p>Status: {{ order.status }}</p>
     <p>Total Price: €{{ order.totalPrice }}</p>
 
