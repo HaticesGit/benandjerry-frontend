@@ -7,13 +7,17 @@ const sceneContainer = ref(null);
 const iceCreamModel = ref(null);
 
 const flavors = [
-  "Chunky Monkey",
-  "Chocolate Fudge Brownie",
-  "Strawberry Doughnut-eee",
-  "Brookieees & Cream",
+    "Chunky Monkey",
+    "Chocolate Fudge Brownie",
+    "Strawberry Doughnut-eee",
+    "Brookieees & Cream",
 ];
 
-const toppings = ["Oreo", "Banana", "Sprinkles"];
+const toppings = [
+    "Oreo", 
+    "Banana", 
+    "Sprinkles"
+];
 
 const selectedFlavor = ref("");
 const selectedTopping = ref("");
@@ -33,18 +37,15 @@ const selectFlavor = (flavor) => {
     };
 
     if (!iceCreamModel.value) return;
-
     iceCreamModel.value.traverse((child) => {
         if (child.isMesh && child.name === "IceCream_3_3") {
             child.material.color.set(colors[flavor]);
         }
-    });
-    
+    });  
 };
 
 const selectTopping = (topping) => {
     selectedTopping.value = topping;
-
     const toppingColors = {
         "Oreo": "#1c1c1c",
         "Banana": "#ffe066",
@@ -52,23 +53,40 @@ const selectTopping = (topping) => {
     };
 
     if (!iceCreamModel.value) return;
-
     iceCreamModel.value.traverse((child) => {
         if (child.isMesh && child.name === "IceCream_3_2") {
             child.material.color.set(toppingColors[topping]);
         }
     });
 };  
+const flavorClass = (flavor) => {
+    const classes = {
+        "Chunky Monkey": "chunky-monkey",
+        "Chocolate Fudge Brownie": "chocolate",
+        "Strawberry Doughnut-eee": "strawberry",
+        "Brookieees & Cream": "brookie",
+    };
+  return classes[flavor];
+};
+
+const toppingClass = (topping) => {
+  const classes = {
+    Oreo: "oreo",
+    Banana: "banana",
+    Sprinkles: "sprinkles",
+  };
+  return classes[topping];
+};
 
 onMounted(() => {
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(75, 400 / 400, 0.1, 1000);
-    camera.position.z = 4;
+    camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(400, 400);
-    renderer.setClearColor("#bdefff");
+    renderer.setSize(650, 650);
+    renderer.setClearColor("#aee0ff");
 
     sceneContainer.value.appendChild(renderer.domElement);
 
@@ -80,14 +98,13 @@ onMounted(() => {
     scene.add(light);
 
     const loader = new GLTFLoader();
-
     loader.load(
         "/models/icecream.glb",
         (gltf) => {
         const model = gltf.scene;
 
-        model.scale.set(2, 2, 2);
-        model.position.y = -1;
+        model.scale.set(4, 4, 4);
+        model.position.y = -1.2;
 
         iceCreamModel.value = model;
         scene.add(model);
@@ -115,7 +132,6 @@ const placeOrder = async () => {
         message.value = "Please complete your order.";
         return;
     }
-    
     const order = {
         customerName: customerName.value,
         address: address.value,
@@ -138,28 +154,196 @@ const placeOrder = async () => {
 </script>
 
 <template>
-  <div ref="sceneContainer" style="width: 400px; height: 400px; margin: auto;"></div>
+  <div class="configurator-page">
+        <div class="ice-preview">
+            <div ref="sceneContainer" class="scene">
+            </div>
+        </div>
 
-  <h1>Create Your Ice Cream</h1>
-  <h2>Choose a flavor</h2>
-  <button v-for="flavor in flavors":class="{ selected: selectedFlavor === flavor }":key="flavor"@click="selectFlavor(flavor)">{{ flavor }}</button>
+        <div class="configurator-panel">
+            <h1>Create your ice cream</h1>
 
-  <h2>Choose a topping</h2>
-  <button v-for="topping in toppings":class="{ selected: selectedTopping === topping }":key="topping"@click="selectTopping(topping)">{{ topping }}</button>
-  
-  <h2>Cup or Cone</h2>
-  <button @click="selectedCupOrCone = 'Cup'">Cup</button>
-  <button @click="selectedCupOrCone = 'Cone'">Cone</button>
+            <h2>Choose a flavor</h2>
+            <div class="option-grid">
+                <button v-for="flavor in flavors":key="flavor":class="[flavorClass(flavor),{ selected: selectedFlavor === flavor }]"@click="selectFlavor(flavor)">
+                    {{ flavor }}
+                </button>
+            </div>
 
-  <h2>Your Selection</h2>
-  <p>Flavor:{{ selectedFlavor }}</p>
-  <p>Topping:{{ selectedTopping }}</p>
-  <p>Cup or Cone:{{ selectedCupOrCone }}</p>
+            <h2>Sprinkle flavour</h2>
+            <div class="option-row">
+                <button v-for="topping in toppings":key="topping":class="[toppingClass(topping),{ selected: selectedTopping === topping }]"@click="selectTopping(topping)">
+                    {{ topping }}
+                </button>
+            </div>
 
-  <h2>Your Information</h2>
-  <input v-model="customerName" placeholder="Your name" />
-  <input v-model="address" placeholder="Your address" />
+            <div class="form-row">
+                <input v-model="customerName" placeholder="Name" />
+                <input v-model="address" placeholder="Address" />
+            </div>
 
-  <button @click="placeOrder">Place Order</button>
-  <p>{{ message }}</p>
+            <button class="order-button" @click="placeOrder">
+                Place order
+            </button>
+
+            <p v-if="message" class="message">{{ message }}</p>
+        </div>
+    </div>
 </template>
+
+
+
+<style scoped>
+.configurator-page {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+.ice-preview {
+    background-color: #aee0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scene {
+    width: 550px;
+    height: 550px;
+}
+
+.configurator-panel {
+    background-color: #352c2b;
+    padding: 30px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    color: #ffd800;
+    font-size: 3rem;
+    margin: 0 0 15px 0;
+}
+
+h2 {
+    color: white;
+    font-size: 1.8rem;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.option-row {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    border: none;
+    border-radius: 10px;
+    background-color: #563838;
+    color: white;
+    padding: 18px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+.selected {
+    outline: 4px solid white;
+    transform: scale(1.03);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+input {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.order-button {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #ffd800;
+    color: #352c2b;
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 18px;
+}
+
+.order-button:hover {
+    background-color: #ffe54d;
+}
+
+.selection-box {
+    margin-top: 15px;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.selection-box p {
+    margin: 8px 0;
+}
+
+.message {
+    margin-top: 15px;
+    color: #ffd800;
+    font-weight: bold;
+}
+
+.chunky-monkey {
+    background-color: #f7d774;
+    color: #352c2b;
+}
+
+.chocolate {
+    background-color: #6f4e37;
+    color: white;
+}
+
+.strawberry {
+    background-color: #ff8fb8;
+    color: white;
+}
+
+.brookie {
+    background-color: #e8d9c5;
+    color: #352c2b;
+}
+
+.oreo {
+    background-color: #2d2424;
+    color: white;
+}
+
+.banana {
+    background-color: #ffe066;
+    color: #352c2b;
+}
+
+.sprinkles {
+    background-color: #ff4fd8;
+    color: white;
+}
+</style>
