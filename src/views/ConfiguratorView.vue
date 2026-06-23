@@ -20,6 +20,7 @@ const selectedTopping = ref("");
 const selectedCupOrCone = ref("");
 const customerName = ref("");
 const address = ref("");
+const message = ref("");
 
 const selectFlavor = (flavor) => {
     selectedFlavor.value = flavor;
@@ -110,6 +111,11 @@ onMounted(() => {
 });
 
 const placeOrder = async () => {
+    if (!selectedFlavor.value || !selectedTopping.value || !customerName.value || !address.value){
+        message.value = "Please complete your order.";
+        return;
+    }
+    
     const order = {
         customerName: customerName.value,
         address: address.value,
@@ -127,7 +133,7 @@ const placeOrder = async () => {
         body: JSON.stringify(order),
     });
 
-    alert("Order placed!");
+    message.value = "Order placed!";
 };
 </script>
 
@@ -136,10 +142,10 @@ const placeOrder = async () => {
 
   <h1>Create Your Ice Cream</h1>
   <h2>Choose a flavor</h2>
-  <button v-for="flavor in flavors":key="flavor"@click="selectFlavor(flavor)">{{ flavor }}</button>
+  <button v-for="flavor in flavors":class="{ selected: selectedFlavor === flavor }":key="flavor"@click="selectFlavor(flavor)">{{ flavor }}</button>
 
   <h2>Choose a topping</h2>
-  <button v-for="topping in toppings":key="topping"@click="selectTopping(topping)">{{ topping }}</button>
+  <button v-for="topping in toppings":class="{ selected: selectedTopping === topping }":key="topping"@click="selectTopping(topping)">{{ topping }}</button>
   
   <h2>Cup or Cone</h2>
   <button @click="selectedCupOrCone = 'Cup'">Cup</button>
@@ -155,4 +161,5 @@ const placeOrder = async () => {
   <input v-model="address" placeholder="Your address" />
 
   <button @click="placeOrder">Place Order</button>
+  <p>{{ message }}</p>
 </template>
