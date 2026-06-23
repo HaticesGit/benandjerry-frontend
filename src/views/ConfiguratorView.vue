@@ -34,8 +34,8 @@ const selectFlavor = (flavor) => {
     if (!iceCreamModel.value) return;
 
     iceCreamModel.value.traverse((child) => {
-        if (child.isMesh) {
-        child.material.color.set(colors[flavor]);
+        if (child.isMesh && child.name === "IceCream_3_3") {
+            child.material.color.set(colors[flavor]);
         }
     });
 };
@@ -70,10 +70,7 @@ onMounted(() => {
         model.position.y = -1;
 
         iceCreamModel.value = model;
-
         scene.add(model);
-
-        console.log("Model loaded!");
         },
         undefined,
         (error) => {
