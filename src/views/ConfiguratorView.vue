@@ -17,6 +17,31 @@ const toppings = [
 const selectedFlavor = ref("");
 const selectedTopping = ref("");
 const selectedCupOrCone = ref("");
+const customerName = ref("");
+const address = ref("");
+const totalPrice = ref(4.5);
+
+const placeOrder = async () => {
+const order = {
+    customerName: customerName.value,
+    address: address.value,
+    flavor: selectedFlavor.value,
+    topping: selectedTopping.value,
+    cupOrCone: selectedCupOrCone.value,
+    totalPrice: 4.5,
+};
+
+await fetch("http://localhost:3000/orders", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+});
+
+alert("Order placed!");
+};
+
 </script>
 
 <template>
@@ -49,4 +74,20 @@ const selectedCupOrCone = ref("");
     <p>Flavor:{{ selectedFlavor }}</p>
     <p>Topping:{{ selectedTopping }}</p>
     <p>Cup or Cone:{{ selectedCupOrCone }}</p>
+
+    <h2>Your Information</h2>
+
+    <input
+    v-model="customerName"
+    placeholder="Your name"
+    />
+
+    <input
+    v-model="address"
+    placeholder="Your address"
+    />
+
+    <button @click="placeOrder">
+        Place Order
+    </button>
 </template>
