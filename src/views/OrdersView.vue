@@ -11,6 +11,13 @@ onMounted(async () => {
 
 <template>
   <div class="orders-page">
+    <router-link
+      to="/"
+      class="back-button"
+    >
+      ← Back to Configurator
+    </router-link>
+
     <h1>Orders</h1>
 
     <div class="orders-grid">
@@ -86,6 +93,16 @@ h1, h2, h3, h4, h5 p{
   background: #ffd800;
   color: #352c2b;
   padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  color: #352c2b;
+  text-decoration: none;
   border-radius: 8px;
   font-weight: bold;
 }
