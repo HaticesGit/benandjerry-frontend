@@ -161,9 +161,6 @@ const placeOrder = async () => {
 
 <template>
   <div class="configurator-page">
-    <router-link to="/admin/login" class="admin-link">
-        Admin
-    </router-link>
     <button class="menu-button" @click="isMenuOpen = !isMenuOpen">
   ☰
 </button>
@@ -199,6 +196,9 @@ const placeOrder = async () => {
             </button>
 
             <p v-if="message" class="message">{{ message }}</p>
+            <router-link to="/admin/login" class="admin-link">
+                Login
+            </router-link>
         </div>
     </div>
 </template>
