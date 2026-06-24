@@ -147,7 +147,7 @@ const placeOrder = async () => {
         totalPrice: 4.5,
     };
 
-    await fetch("http://localhost:3000/orders", {
+    await fetch(`${import.meta.env.VITE_API_URL}/orders`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",

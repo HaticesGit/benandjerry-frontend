@@ -8,7 +8,7 @@ const router = useRouter();
 
 onMounted(async () => {
   const response = await fetch(
-    `http://localhost:3000/orders/${route.params.id}`
+    `${import.meta.env.VITE_API_URL}/orders/${route.params.id}`
   );
 
   order.value = await response.json();
@@ -16,7 +16,7 @@ onMounted(async () => {
 
 const updateStatus = async (status) => {
     const response = await fetch(
-        `http://localhost:3000/orders/${route.params.id}`,
+        `${import.meta.env.VITE_API_URL}/orders/${route.params.id}`,
     {
         method: "PATCH",
         headers: {
@@ -33,7 +33,7 @@ const updateStatus = async (status) => {
 
 const deleteOrder = async () => {
     await fetch(
-        `http://localhost:3000/orders/${route.params.id}`,
+        `${import.meta.env.VITE_API_URL}/orders/${route.params.id}`,
     {
         method: "DELETE",
     }

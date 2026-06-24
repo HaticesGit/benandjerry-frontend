@@ -4,7 +4,7 @@ import { ref, onMounted } from "vue";
 const orders = ref([]);
 
 onMounted(async () => {
-  const response = await fetch("http://localhost:3000/orders");
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
   orders.value = await response.json();
 });
 </script>
