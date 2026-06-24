@@ -161,6 +161,9 @@ const placeOrder = async () => {
 
 <template>
   <div class="configurator-page">
+    <router-link to="/admin/login" class="admin-link">
+        Admin
+    </router-link>
     <button class="menu-button" @click="isMenuOpen = !isMenuOpen">
   ☰
 </button>
@@ -424,5 +427,21 @@ input {
     width: 100%;
     box-sizing: border-box;
   }
+  .admin-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  background: #ffd800;
+  color: #352c2b;
+  padding: 10px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.admin-link:hover {
+  background: #ffe54d;
+}
 }
 </style>
