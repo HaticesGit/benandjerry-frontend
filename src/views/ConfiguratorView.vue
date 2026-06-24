@@ -24,6 +24,7 @@ const selectedTopping = ref("");
 const customerName = ref("");
 const address = ref("");
 const message = ref("");
+const isMenuOpen = ref(false);
 
 const selectFlavor = (flavor) => {
     selectedFlavor.value = flavor;
@@ -98,21 +99,28 @@ onMounted(() => {
 
     const loader = new GLTFLoader();
     loader.load(
-        "/models/icecream.glb",
-        (gltf) => {
-        const model = gltf.scene;
+  "/models/icecream.glb",
+  (gltf) => {
+    const model = gltf.scene;
 
-        model.scale.set(4, 4, 4);
-        model.position.y = -1.2;
+    model.scale.set(4, 4, 4);
 
-        iceCreamModel.value = model;
-        scene.add(model);
-        },
-        undefined,
-        (error) => {
-        console.error(error);
-        }
-    );
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+
+    model.position.x = -center.x;
+    model.position.y = -center.y;
+    model.position.z = -center.z;
+
+    iceCreamModel.value = model;
+
+    scene.add(model);
+  },
+  undefined,
+  (error) => {
+    console.error(error);
+  }
+);
 
     const animate = () => {
         requestAnimationFrame(animate);
@@ -153,12 +161,15 @@ const placeOrder = async () => {
 
 <template>
   <div class="configurator-page">
+    <button class="menu-button" @click="isMenuOpen = !isMenuOpen">
+  ☰
+</button>
         <div class="ice-preview">
             <div ref="sceneContainer" class="scene">
             </div>
         </div>
 
-        <div class="configurator-panel">
+        <div class="configurator-panel":class="{ open: isMenuOpen }">
             <h1>Create your ice cream</h1>
 
             <h2>Choose a flavor</h2>
@@ -343,5 +354,75 @@ input {
 .sprinkles {
     background-color: #ff4fd8;
     color: white;
+}
+.menu-button {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .configurator-page {
+    height: 100vh;
+    width: 100vw;
+    display: block;
+    overflow: hidden;
+  }
+
+  .ice-preview {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  .scene {
+    width: 100vw;
+    height: 100vh;
+    transform: none;
+  }
+
+  .menu-button {
+    display: block;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 20;
+    background: #ffd800;
+    color: #352c2b;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 28px;
+    padding: 0;
+  }
+
+  .configurator-panel {
+    position: fixed;
+    top: 0;
+    right: -100vw;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 32px;
+    box-sizing: border-box;
+    transition: right 0.3s ease;
+  }
+
+  .configurator-panel.open {
+    right: 0;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .option-row {
+    flex-wrap: wrap;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 </style>
