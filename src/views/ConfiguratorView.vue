@@ -206,6 +206,22 @@ const placeOrder = async () => {
 
 
 <style scoped>
+.admin-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  background: #ffd800;
+  color: #352c2b;
+  padding: 10px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.admin-link:hover {
+  background: #ffe54d;
+}
 .configurator-page {
     width: 100%;
     height: 100vh;
@@ -427,21 +443,5 @@ input {
     width: 100%;
     box-sizing: border-box;
   }
-  .admin-link {
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 20;
-  background: #ffd800;
-  color: #352c2b;
-  padding: 10px 16px;
-  border-radius: 999px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.admin-link:hover {
-  background: #ffe54d;
-}
 }
 </style>
