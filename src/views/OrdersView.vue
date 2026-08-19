@@ -1,7 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const orders = ref([]);
+const router = useRouter();
+
+const logout = () => {
+  localStorage.removeItem("isAdmin");
+  router.push("/admin/login");
+};
 
 onMounted(async () => {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/orders`);
@@ -17,6 +24,10 @@ onMounted(async () => {
     >
       ← Back to Configurator
     </router-link>
+
+    <button @click="logout" class="logout-button">
+      Logout
+    </button>
 
     <h1>Orders</h1>
 
@@ -105,5 +116,19 @@ h1, h2, h3, h4, h5 p{
   text-decoration: none;
   border-radius: 8px;
   font-weight: bold;
+}
+.logout-button {
+  float: right;
+  background: #352c2b;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  opacity: 0.8;
 }
 </style>
